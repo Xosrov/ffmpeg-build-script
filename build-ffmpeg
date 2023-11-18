@@ -924,7 +924,9 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
       # Note that multi-architecture builds are not supported in ffmpeg
       # see https://patchwork.ffmpeg.org/comment/62905/
       export CUDA_COMPUTE_CAPABILITY=52
+      echo "using default"
     fi
+    echo "compute capability is $CUDA_COMPUTE_CAPABILITY"
     CONFIGURE_OPTIONS+=("--nvccflags=-gencode arch=compute_$CUDA_COMPUTE_CAPABILITY,code=sm_$CUDA_COMPUTE_CAPABILITY -O2")
   else
     CONFIGURE_OPTIONS+=("--disable-ffnvcodec")
