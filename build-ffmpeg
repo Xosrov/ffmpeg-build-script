@@ -958,9 +958,10 @@ fi
 if build "libvmaf" "2.3.1"; then
   download "https://github.com/Netflix/vmaf/archive/refs/tags/v$CURRENT_PACKAGE_VERSION.tar.gz"
   cd libvmaf || exit
-  execute meson build --prefix="${WORKSPACE}" --buildtype=release --default-library=static --libdir="${WORKSPACE}"/lib
-  execute ninja -C build
-  execute ninja -C build install
+  
+  execute meson build --prefix="${WORKSPACE}" --libdir="${WORKSPACE}"/lib --default-library=static --buildtype=release -Denable_tests=false -Denable_docs=false -Dbuilt_in_models=true
+  execute ninja -vC build
+  execute ninja -vC build install
   build_done "libvmaf" $CURRENT_PACKAGE_VERSION
   CONFIGURE_OPTIONS+=("--enable-libvmaf")
 fi
@@ -986,6 +987,7 @@ download "https://github.com/FFmpeg/FFmpeg/archive/refs/heads/release/$FFMPEG_VE
 ./configure "${CONFIGURE_OPTIONS[@]}" \
   --disable-debug \
   --disable-shared \
+  --ld="g++" \
   --enable-pthreads \
   --enable-static \
   --enable-version3 \
