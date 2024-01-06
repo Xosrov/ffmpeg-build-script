@@ -958,7 +958,11 @@ fi
 if build "libvmaf" "2.3.1"; then
   download "https://github.com/Netflix/vmaf/archive/refs/tags/v$CURRENT_PACKAGE_VERSION.tar.gz"
   cd libvmaf || exit
-  execute meson build --prefix="${WORKSPACE}" --buildtype=release --default-library=static --libdir="${WORKSPACE}"/lib
+  if command_exists "nvcc"; then
+    execute meson build --prefix="${WORKSPACE}" --buildtype=release --default-library=static --libdir="${WORKSPACE}"/lib -Denable_cuda=true
+  else
+    execute meson build --prefix="${WORKSPACE}" --buildtype=release --default-library=static --libdir="${WORKSPACE}"/lib
+  fi
   execute ninja -C build
   execute ninja -C build install
   build_done "libvmaf" $CURRENT_PACKAGE_VERSION
